@@ -61,10 +61,17 @@ wrangler pages deploy . --project-name=annannx
 ### 4. Cloudflare Workers (`wrangler deploy`) — also works
 
 If your Cloudflare project runs `npx wrangler deploy` (Cloudflare Workers,
-not Pages), this repo also ships a pre-configured `wrangler.jsonc` that
-excludes `node_modules/**` and other non-asset paths from the deploy.
-So `wrangler deploy` will only ship the actual static files (~7 MB) and
-won't hit the 25 MiB asset limit.
+not Pages), this repo also ships:
+
+- a pre-configured `wrangler.jsonc` that excludes `node_modules/**` and
+  other non-asset paths from the deploy (~7 MB shipped, well under the
+  25 MiB asset limit);
+- a `src/worker.js` entrypoint that does **case-insensitive asset lookup**
+  — the bundled JS builds URLs like `/home/AllLotteryGames/WinGo/` but
+  the files on disk are lowercase `home/alllotterygames/wingo/`. The
+  Worker retries the request with a lowercased pathname so both casings
+  resolve correctly. Without this Worker, Cloudflare Workers returns 404
+  on the mixed-case URL.
 
 ### 4. Use Vercel instead?
 
@@ -80,6 +87,8 @@ that look like gambling content). Use a neutral name like `annannx-game`.
 ├── _headers                  ← Cloudflare Pages cache + security headers
 ├── 404.html                  ← Cloudflare Pages fallback for unknown paths
 ├── wrangler.jsonc            ← Cloudflare Workers config (assets.exclude)
+├── src/
+│   └── worker.js             ← Cloudflare Workers entrypoint (case-insensitive)
 ├── vercel.json               ← alternative config if you switch to Vercel
 ├── css/index.css
 ├── js/index.js               ← main bundle (1.8 MB)
@@ -87,9 +96,9 @@ that look like gambling content). Use a neutral name like `annannx-game`.
 ├── png/                      ← all static images
 ├── home/
 │   ├── alllotterygames/
-│   │   ├── wingo/            ← /home/alllotterygames/wingo/
-│   │   └── wintrx/           ← /home/alllotterygames/wintrx/
-│   └── minigame/gold/        ← /home/minigame/gold/
+│   │   ├── wingo/            ← /home/alllotterygames/wingo/  (or WinGo)
+│   │   └── wintrx/           ← /home/alllotterygames/wintrx/ (or WinTrx)
+│   └── minigame/gold/        ← /home/minigame/gold/         (or MiniGame/Gold)
 ├── external/                 ← cached CDN / Supabase payloads
 └── annannx-vercel.zip        ← drag-and-drop bundle
 ```
