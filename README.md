@@ -1,10 +1,11 @@
-# Annannx — Vercel deployment
+# Annannx — Cloudflare Pages deployment
 
 Static-site build of the **Annannx** mini-game site, repackaged so it deploys
-to [Vercel](https://vercel.com) without a build step and without console errors.
+to [Cloudflare Pages](https://pages.cloudflare.com) without a build step and
+without console errors.
 
 > The original repo at <https://github.com/loram999/Annannx.git> ships only a
-> zipped static export. This folder is the **same content** with the Vercel-
+> zipped static export. This repo is the **same content** with Cloudflare-
 > specific fixes baked in.
 
 ## What changed vs. the original zip
@@ -13,52 +14,58 @@ to [Vercel](https://vercel.com) without a build step and without console errors.
 | --- | --- |
 | Sub-route HTML files referenced `css/`, `png/`, `js/` with **relative** paths that would 404 on Vercel | All asset references rewritten to be **root-relative** (`/css/...`, `/png/...`, `/js/...`). 71 paths fixed across 3 files. |
 | 29 PNG / MP3 assets referenced by the HTML were never shipped → 404s in the browser console | Created 1×1 black PNG placeholders + silent MP3 stubs for every missing asset. Combined with the `onerror="this.style.display='none'"` handlers added to 42 `<img>` tags, the UI stays clean. |
-| No `vercel.json` shipped → Vercel default caching was suboptimal for 1.8 MB JS bundle | `vercel.json` with `Cache-Control: public, max-age=31536000, immutable` on every immutable asset directory, plus standard security headers. |
+| No `vercel.json` shipped → default caching was suboptimal for 1.8 MB JS bundle | `_headers` file with `Cache-Control: public, max-age=31536000, immutable` on every immutable asset directory, plus standard security headers. |
 | Internal `_manifest.json` shipped | Removed (it was site-export metadata, not needed at runtime). |
 
-## Three ways to deploy
+## How to deploy to Cloudflare Pages
 
-### 1. Drag-and-drop (zero setup)
+### 1. From GitHub (recommended)
+
+1. Make sure this repo is on your GitHub: <https://github.com/loram999/Annannx>
+2. Go to <https://pages.cloudflare.com> → **Create a project** → **Connect to Git**
+3. Pick `loram999/Annannx`.
+4. **Build settings**:
+   - Framework preset: **None** (or "Static HTML")
+   - Build command: *(leave empty)*
+   - Build output directory: `/` (the repo root)
+   - Root directory: `/`
+5. Click **Save and Deploy**.
+
+Cloudflare will deploy `index.html` at the repo root, serve every sub-route
+(`/home/alllotterygames/wingo/`, etc.) from its matching `index.html`, and
+hand back a `*.pages.dev` URL like `https://annannx.pages.dev`.
+
+### 2. Drag-and-drop (no Git)
 
 1. Download `annannx-vercel.zip` from the repo root.
 2. Extract — you get a folder named `mini-game.site_2026-08-05_12-42/`.
-3. Go to <https://vercel.com/new> → drag the folder onto the page.
-4. Click **Deploy**. Done.
+3. Go to <https://pages.cloudflare.com> → **Create a project** → **Direct Upload**.
+4. Drag the `mini-game.site_2026-08-05_12-42/` folder onto the page.
+5. Click **Deploy site**.
 
-### 2. Import from GitHub
-
-1. Push this repo to GitHub.
-2. Go to <https://vercel.com/new> → **Import Git Repository** → pick this repo.
-3. Vercel auto-detects it as static. Click **Deploy**.
-
-### 3. Vercel CLI
+### 3. Wrangler CLI
 
 ```bash
-npm i -g vercel
-vercel login
-vercel --prod
+npm i -g wrangler
+wrangler login
+wrangler pages deploy . --project-name=annannx
 ```
 
-### 4. GitHub Actions auto-deploy
+### 4. Use Vercel instead?
 
-The included workflow at `.github/workflows/deploy.yml` deploys on every
-push to `main`. Set these secrets in your repo:
-
-- `VERCEL_TOKEN` — from <https://vercel.com/account/tokens>
-- `VERCEL_ORG_ID` — your Vercel team ID
-- `VERCEL_PROJECT_ID` — the project ID
-
-Then `git push` and Vercel picks it up automatically.
+The repo still ships `vercel.json`, so a Vercel import also works —
+just **don't name the project "lottery"** (Vercel auto-disables projects
+that look like gambling content). Use a neutral name like `annannx-game`.
 
 ## Project layout
 
 ```
 ./
-├── index.html                ← entry point (Vercel serves this at /)
-├── vercel.json               ← Vercel static-site config
-├── package.json              ← convenience scripts (vercel CLI)
-├── .github/workflows/
-│   └── deploy.yml            ← CI/CD to Vercel
+├── index.html                ← entry point (Cloudflare serves this at /)
+├── _headers                  ← Cloudflare cache + security headers
+├── 404.html                  ← Cloudflare fallback for unknown paths
+├── vercel.json               ← alternative config if you switch to Vercel
+├── package.json              ← convenience scripts (wrangler CLI)
 ├── css/index.css
 ├── js/index.js               ← main bundle (1.8 MB)
 ├── js/index-2.js
@@ -69,8 +76,7 @@ Then `git push` and Vercel picks it up automatically.
 │   │   └── wintrx/           ← /home/alllotterygames/wintrx/
 │   └── minigame/gold/        ← /home/minigame/gold/
 ├── external/                 ← cached CDN / Supabase payloads
-├── annannx-vercel.zip        ← download bundle
-└── mini-game.site_2026-08-05_12-42.zip  ← original raw export
+└── annannx-vercel.zip        ← drag-and-drop bundle
 ```
 
 ## Local preview
