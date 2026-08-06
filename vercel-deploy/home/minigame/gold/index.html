@@ -1,0 +1,132 @@
+<html lang="my"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mini Gold Goal</title>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+
+<div id="app">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="loading-title">Mini Gold Goal</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loadingBar" style="width: 100%;"></div>
+        </div>
+        <div class="loading-percent" id="loadingPercent">100%</div>
+    </div>
+
+    <!-- Dialog -->
+    <div class="dialog-overlay" id="dialogOverlay">
+        <div class="dialog-box">
+            <div class="dialog-icon" id="dialogIcon">❌</div>
+            <div class="dialog-message" id="dialogMessage">လက်ကျန်ငွေ မလုံလောက်ပါ။
+Balance: 0.00 MMK</div>
+            <button class="dialog-ok-btn" id="dialogOkBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Confirm Dialog (Back button) -->
+    <div class="dialog-overlay" id="confirmOverlay">
+        <div class="dialog-box">
+            <div class="dialog-icon" id="confirmIcon">❓</div>
+            <div class="dialog-message" id="confirmMessage">ထွက်မာလား?</div>
+            <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
+                <button class="dialog-ok-btn" id="confirmNo" style="background:#ef4444;">မထွက်ပါ</button>
+                <button class="dialog-ok-btn" id="confirmYes" style="background:#2e7d32;">ထွက်မယ်</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="back-btn" id="backBtn">
+            <img src="/png/bcakIcon-DIJ4r1KY.png" alt="back" onerror="this.style.display='none'">
+        </div>
+        <div class="balance-chip" id="balanceChip">
+            <span class="coin-icon">
+                <img src="/png/balance-Ckse1McI.png" alt="balance" onerror="this.style.display='none'">
+            </span>
+            K<span id="display-balance">0.00</span>
+        </div>
+        <div class="sound-btn" id="soundToggle">
+            <img src="/png/voice-B3roEJIA.png" alt="sound" id="soundIcon" onerror="this.style.display='none'">
+        </div>
+    </div>
+
+    <!-- Game Area -->
+    <div class="game-area">
+        <div class="goal-title">GOAL</div>
+        <div class="game-info">
+            <div class="game-id" id="game-id-text">Game ID: BGX638458461202262...</div>
+            <div class="next-multiplier" id="next-mult">Next: 1.45x</div>
+        </div>
+
+        <!-- Grid -->
+        <div class="grid" id="grid"><div class="tile disabled" data-index="0">?</div><div class="tile disabled" data-index="1">?</div><div class="tile disabled" data-index="2">?</div><div class="tile disabled" data-index="3">?</div><div class="tile disabled" data-index="4">?</div><div class="tile disabled" data-index="5">?</div><div class="tile disabled" data-index="6">?</div><div class="tile disabled" data-index="7">?</div><div class="tile disabled" data-index="8">?</div><div class="tile disabled" data-index="9">?</div><div class="tile disabled" data-index="10">?</div><div class="tile disabled" data-index="11">?</div></div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="mock-buttons">
+                <div class="mock-btn">RANDOM</div>
+                <div class="mock-btn">
+                    <div class="switch"></div> Auto Game
+                </div>
+            </div>
+            <div class="mock-buttons">
+                <div class="mock-btn" style="background: transparent; border: none;">Field: ◼ ⌄</div>
+                <div class="mock-btn" style="background: transparent; border: none;">Mines: 2 ⌄</div>
+            </div>
+        </div>
+
+        <!-- Betting Area -->
+        <div class="bet-area">
+            <div class="bet-input-group">
+                <div class="bet-amount" id="betAmountClick">
+                    <div id="bet-display">1,000</div>
+                    <span>MMK</span>
+                </div>
+                <button class="adjust-btn" id="betMinus">-</button>
+                <button class="adjust-btn" id="betPreset">🪙</button>
+                <button class="adjust-btn" id="betPlus">+</button>
+            </div>
+
+            <div class="action-row">
+                <button class="refresh-btn" id="refreshBalance">↻</button>
+                <button id="action-btn" class="action-btn btn-bet">စတင်မည်</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-icon">
+            <img src="/png/balance-Ckse1McI.png" alt="icon" onerror="this.style.display='none'">
+        </div>
+        <div id="footer-balance">0.00 MMK</div>
+        <div>≡</div>
+    </div>
+
+    <!-- Preset Modal -->
+    <div class="modal-overlay" id="presetModal">
+        <div class="preset-modal scrollable">
+            <h3>Bet</h3>
+            <div class="preset-grid" id="presetGrid"><button class="preset-btn">1,000</button><button class="preset-btn">2,000</button><button class="preset-btn">5,000</button><button class="preset-btn">10,000</button><button class="preset-btn">20,000</button><button class="preset-btn">50,000</button><button class="preset-btn">100,000</button><button class="preset-btn">200,000</button><button class="preset-btn">500,000</button></div>
+        </div>
+    </div>
+
+    <!-- Numpad Modal -->
+    <div class="modal-overlay" id="numpadModal">
+        <div class="numpad-modal">
+            <div class="numpad-grid" id="numpadGrid"><button class="num-btn">1</button><button class="num-btn">2</button><button class="num-btn">3</button><button class="num-btn">4</button><button class="num-btn">5</button><button class="num-btn">6</button><button class="num-btn">7</button><button class="num-btn">8</button><button class="num-btn">9</button><button class="num-btn">000</button><button class="num-btn">0</button><button class="num-btn">⌫</button><button class="num-btn submit">✓</button></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+</div>
+
+
+
+
+</body></html>
