@@ -46,10 +46,17 @@ hand back a `*.pages.dev` URL like `https://annannx.pages.dev`.
 ### 3. Wrangler CLI
 
 ```bash
-npm i -g wrangler
+npm i -g wrangler          # install wrangler globally (NOT in this repo)
 wrangler login
 wrangler pages deploy . --project-name=annannx
 ```
+
+> ⚠️ **Don't add `package.json` to this repo.** Cloudflare Pages detects a
+> `package.json` and runs `npm install` automatically, which pulls in
+> `wrangler` and its 122 MiB `node_modules/workerd/bin/workerd` binary —
+> blowing past the 25 MiB per-asset limit and failing the build. That's
+> exactly why this repo intentionally ships **no** `package.json`. Install
+> wrangler on your dev machine instead.
 
 ### 4. Use Vercel instead?
 
@@ -65,7 +72,6 @@ that look like gambling content). Use a neutral name like `annannx-game`.
 ├── _headers                  ← Cloudflare cache + security headers
 ├── 404.html                  ← Cloudflare fallback for unknown paths
 ├── vercel.json               ← alternative config if you switch to Vercel
-├── package.json              ← convenience scripts (wrangler CLI)
 ├── css/index.css
 ├── js/index.js               ← main bundle (1.8 MB)
 ├── js/index-2.js
@@ -78,6 +84,9 @@ that look like gambling content). Use a neutral name like `annannx-game`.
 ├── external/                 ← cached CDN / Supabase payloads
 └── annannx-vercel.zip        ← drag-and-drop bundle
 ```
+
+> **No `package.json`** — by design. See the warning in the Wrangler CLI
+> section above for why.
 
 ## Local preview
 
