@@ -58,6 +58,14 @@ wrangler pages deploy . --project-name=annannx
 > exactly why this repo intentionally ships **no** `package.json`. Install
 > wrangler on your dev machine instead.
 
+### 4. Cloudflare Workers (`wrangler deploy`) — also works
+
+If your Cloudflare project runs `npx wrangler deploy` (Cloudflare Workers,
+not Pages), this repo also ships a pre-configured `wrangler.jsonc` that
+excludes `node_modules/**` and other non-asset paths from the deploy.
+So `wrangler deploy` will only ship the actual static files (~7 MB) and
+won't hit the 25 MiB asset limit.
+
 ### 4. Use Vercel instead?
 
 The repo still ships `vercel.json`, so a Vercel import also works —
@@ -69,8 +77,9 @@ that look like gambling content). Use a neutral name like `annannx-game`.
 ```
 ./
 ├── index.html                ← entry point (Cloudflare serves this at /)
-├── _headers                  ← Cloudflare cache + security headers
-├── 404.html                  ← Cloudflare fallback for unknown paths
+├── _headers                  ← Cloudflare Pages cache + security headers
+├── 404.html                  ← Cloudflare Pages fallback for unknown paths
+├── wrangler.jsonc            ← Cloudflare Workers config (assets.exclude)
 ├── vercel.json               ← alternative config if you switch to Vercel
 ├── css/index.css
 ├── js/index.js               ← main bundle (1.8 MB)
