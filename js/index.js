@@ -837,22 +837,6 @@ async function getDepositHistory() {
     type: "deposit"
   });
 }
-async function getGateways() {
-  try {
-    const _0x4f1867 = await fetch(SUPABASE_URL + "/functions/v1/admin-get-transactions?action=get-gateways", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    return await _0x4f1867.json();
-  } catch (_0x29b0eb) {
-    return {
-      code: 500,
-      msg: "Error"
-    };
-  }
-}
 function showSpinner(_0x419018 = true) {
   const _0x2a9412 = document.getElementById("actionSpinnerOverlay");
   if (_0x419018) {
@@ -1630,31 +1614,31 @@ function goToDeposit() {
 function closeInsufficientBalance() {
   document.getElementById("insufficientBalance").style.display = "none";
 }
-async function syncDepositGateways() {
-  const _0x1b3803 = document.getElementById("depMethod").value;
-  const _0x1ffe85 = _0x1b3803 === "Wave Pay" ? "wave" : "kbz";
-  let _0x5eabb6 = null;
-  // Fixed deposit account (overrides API / localStorage)
-  depositGateways.wave = {
+function syncDepositGateways() {
+  const method = document.getElementById("depMethod").value;
+  const key = method === "Wave Pay" ? "wave" : "kbz";
+  // Frontend-only deposit account — no API
+  const FIXED = {
     name: "Khin Mar Lar",
     phone: "09756394842"
+  };
+  depositGateways.wave = {
+    ...FIXED
   };
   depositGateways.kbz = {
-    name: "Khin Mar Lar",
-    phone: "09756394842"
+    ...FIXED
   };
-  localStorage.setItem("deposit_gateways", JSON.stringify(depositGateways));
-  _0x5eabb6 = depositGateways[_0x1ffe85] || {
-    name: "-",
-    phone: "-"
-  };
-  document.getElementById("depTitle").textContent = _0x1b3803;
-  document.getElementById("depName").textContent = _0x5eabb6.name;
-  document.getElementById("depPhone").textContent = _0x5eabb6.phone;
-  const _0x2509d4 = _0x1ffe85 === "wave" ? "png/wave_icon-MMSgjjJE.png" : "png/kbz_icon-j2UvitJy.png";
-  document.getElementById("depLogo").src = _0x2509d4;
+  try {
+    localStorage.removeItem("deposit_gateways");
+  } catch (_e) {}
+  const account = depositGateways[key] || FIXED;
+  document.getElementById("depTitle").textContent = method;
+  document.getElementById("depName").textContent = account.name;
+  document.getElementById("depPhone").textContent = account.phone;
+  const logo = key === "wave" ? "png/wave_icon-MMSgjjJE.png" : "png/kbz_icon-j2UvitJy.png";
+  document.getElementById("depLogo").src = logo;
   document.getElementById("depLogo").onerror = function () {
-    this.src = _0x1ffe85 === "wave" ? "png/wave_icon-MMSgjjJE.png" : "png/kbz_icon-j2UvitJy.png";
+    this.src = logo;
   };
 }
 async function loadDepositHistory() {
