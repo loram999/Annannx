@@ -95,9 +95,9 @@ that look like gambling content). Use a neutral name like `annannx-game`.
 ├── js/index-2.js
 ├── png/                      ← all static images
 ├── home/
-│   ├── alllotterygames/
-│   │   ├── wingo/            ← /home/alllotterygames/wingo/  (or WinGo)
-│   │   └── wintrx/           ← /home/alllotterygames/wintrx/ (or WinTrx)
+│   ├── AllLotteryGames/
+│   │   ├── WinGo/            ← /home/AllLotteryGames/WinGo/  (matches the URL the JS uses)
+│   │   └── WinTrx/           ← /home/AllLotteryGames/WinTrx/ (matches the URL the JS uses)
 │   └── minigame/gold/        ← /home/minigame/gold/         (or MiniGame/Gold)
 ├── external/                 ← cached CDN / Supabase payloads
 └── annannx-vercel.zip        ← drag-and-drop bundle
