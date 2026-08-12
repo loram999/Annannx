@@ -1572,6 +1572,29 @@ function renderGames(_0x163d5c) {
     _0x1f658.style.opacity = "1";
   }, 200);
 }
+function hasMadeFirstDeposit() {
+  if (userProfileData && Number(userProfileData.totalDeposit) > 0) {
+    return true;
+  }
+  return Array.isArray(depositHistory) && depositHistory.length > 0;
+}
+function showGameDepositDialog() {
+  const _0x4e26d1 = document.getElementById("gameDepositDialog");
+  if (!_0x4e26d1) {
+    showCustomDialog(LANG.warning, "ပထမဦးဆုံးငွေသွင်းပါ");
+    return;
+  }
+  const _0x1d3a96 = document.getElementById("gdTitle");
+  const _0x2c8d31 = document.getElementById("gdDesc");
+  if (_0x1d3a96) {
+    _0x1d3a96.textContent = "ပထမဦးဆုံးငွေသွင်းပါ";
+  }
+  if (_0x2c8d31) {
+    _0x2c8d31.textContent = "ဤဂိမ်းကို ကစားရန်အတွက် အရင်ဆုံး ငွေသွင်းရပါမည်။";
+  }
+  _0x4e26d1.classList.remove("hidden");
+  _0x4e26d1.style.display = "flex";
+}
 function attemptEnterGame(_0x16b0d9, _0x42596f) {
   if (isSessionExpired) {
     showSessionExpiredDialog();
@@ -1584,6 +1607,10 @@ function attemptEnterGame(_0x16b0d9, _0x42596f) {
   if (!userProfileData) {
     showCustomDialog(LANG.warning, LANG.gameLoginRequired);
     showScreen("login");
+    return;
+  }
+  if ((_0x16b0d9 === 1 || _0x16b0d9 === 2) && !hasMadeFirstDeposit()) {
+    showGameDepositDialog();
     return;
   }
   showSpinner(true);
@@ -1601,7 +1628,12 @@ function attemptEnterGame(_0x16b0d9, _0x42596f) {
   }, 800);
 }
 function closeGameDepositDialog() {
-  document.getElementById("gameDepositDialog").style.display = "none";
+  const _0x32ccf6 = document.getElementById("gameDepositDialog");
+  if (!_0x32ccf6) {
+    return;
+  }
+  _0x32ccf6.style.display = "none";
+  _0x32ccf6.classList.add("hidden");
 }
 function goToDepositFromGame() {
   closeGameDepositDialog();
