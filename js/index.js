@@ -1625,7 +1625,7 @@ function attemptEnterGame(_0x16b0d9, _0x42596f) {
     showScreen("login");
     return;
   }
-  if ((_0x16b0d9 === 1 || _0x16b0d9 === 2 || _0x16b0d9 === 3) && !hasMadeFirstDeposit()) {
+  if ((_0x16b0d9 === 1 || _0x16b0d9 === 2) && !hasMadeFirstDeposit()) {
     showGameDepositDialog();
     return;
   }
