@@ -1,4 +1,4 @@
-<html><head><meta name="color-scheme" content="light dark"></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap');
 
 * {
     box-sizing: border-box;
@@ -660,4 +660,4 @@ body {
 .scrollable::-webkit-scrollbar {
     width: 0;
     background: transparent;
-}</pre></body></html>
+}
