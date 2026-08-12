@@ -522,6 +522,7 @@ function toggleCheckbox(_0x1b7917) {
 }
 function showSessionExpiredDialog() {
   localStorage.removeItem("mini_auth_token");
+  try { localStorage.removeItem("mini_has_deposit"); } catch (_e) {}
   authToken = null;
   userProfileData = null;
   isSessionExpired = true;
@@ -1469,6 +1470,13 @@ function renderUserUI(_0x2f8bee) {
   if (!_0x2f8bee) {
     return;
   }
+  try {
+    if (Number(_0x2f8bee.totalDeposit) > 0) {
+      localStorage.setItem("mini_has_deposit", "1");
+    } else {
+      localStorage.removeItem("mini_has_deposit");
+    }
+  } catch (_e) {}
   document.getElementById("authStateGuest").style.display = "none";
   document.getElementById("authStateUser").style.display = "flex";
   const _0x1b1cc2 = Number(_0x2f8bee.balance || 0).toFixed(2);
@@ -1576,7 +1584,15 @@ function hasMadeFirstDeposit() {
   if (userProfileData && Number(userProfileData.totalDeposit) > 0) {
     return true;
   }
-  return Array.isArray(depositHistory) && depositHistory.length > 0;
+  if (Array.isArray(depositHistory) && depositHistory.length > 0) {
+    return true;
+  }
+  try {
+    if (localStorage.getItem("mini_has_deposit") === "1") {
+      return true;
+    }
+  } catch (_e) {}
+  return false;
 }
 function showGameDepositDialog() {
   const _0x4e26d1 = document.getElementById("gameDepositDialog");
@@ -2540,6 +2556,7 @@ async function triggerApplicationSignOut() {
       await logout();
     }
     localStorage.removeItem("mini_auth_token");
+    try { localStorage.removeItem("mini_has_deposit"); } catch (_e) {}
     authToken = null;
     userProfileData = null;
     isSessionExpired = false;
@@ -2795,6 +2812,7 @@ function initApp() {
         };
         depositHistory.unshift(_0x359294);
         await refreshUserData();
+        try { localStorage.setItem("mini_has_deposit", "1"); } catch (_e) {}
         showCustomDialog(LANG.success, LANG.depositSuccess + "\n" + LANG.orderId + ": " + _0x3b4256.data.orderId + "\n" + LANG.depositPending, "png/success-pXDR1HMK.png");
         document.getElementById("formDeposit").reset();
         showScreen("home");
