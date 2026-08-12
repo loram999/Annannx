@@ -90,12 +90,14 @@
                 <div class="slide-text-container">
                     <span class="slide-text" id="marqueeText"><i class="fa-solid fa-horn mr-1"></i> မင်္ဂလာပါ၊ မိနီဂိမ်းမှကြိုဆိုပါတယ်၊ ငွေသွင်း/ငွေထုတ် ၁၀၀% ယုံကြည်စိတ်ချစွာစိတ်ကြိုက်ပြုလုပ်နိုင်ပါတယ်၊ ဘောနပ်စ်များစွာရယူ၍ အမြတ်များယူလိုက်ကြစို့ !</span>
                 </div>
+                <div class="game-section-hidden" id="gameSection">
                 <div class="game-tabs">
                     <button onclick="filterGames('all')" id="gameTabAll" class="game-tab-active">ဂိမ်းစာရင်းများ</button>
                     <button onclick="filterGames('lottery')" id="gameTabLottery" class="game-tab-inactive">ထီ</button>
                     <button onclick="filterGames('mini')" id="gameTabMini" class="game-tab-inactive">မီနီဂိမ်း</button>
                 </div>
                 <div id="gameGridContainer" style="opacity: 0;"></div>
+                </div>
                 <div id="winnerSection">
                     <div class="winner-title">
                         <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
@@ -806,8 +808,7 @@
                 <div class="gd-title" id="gdTitle">ပထမဦးဆုံးငွေသွင်းပါ</div>
                 <div class="gd-desc" id="gdDesc">ဤဂိမ်းကို ကစားရန်အတွက် အရင်ဆုံး ငွေသွင်းရပါမည်။</div>
                 <div class="gd-btn-group">
-                    <button onclick="closeGameDepositDialog()" class="gd-btn-cancel" id="gdCancelBtn">မလုပ်တော့ပါ</button>
-                    <button onclick="goToDepositFromGame()" class="gd-btn-deposit" id="gdDepositBtn">ငွေသွင်းမည်</button>
+                    <button onclick="closeGameDepositDialog()" class="gd-btn-cancel" id="gdCancelBtn">ပိတ်မည်</button>
                 </div>
             </div>
         </div>
